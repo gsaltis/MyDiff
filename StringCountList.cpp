@@ -59,7 +59,7 @@ StringCountList::FindString
  *****************************************************************************/
 int
 StringCountList::FindStringCount
-(QString InString)
+(QString InString, int InTrack)
 {
   StringCount*                    s;
 
@@ -67,7 +67,7 @@ StringCountList::FindStringCount
   if ( NULL == s ) {
     return 0;
   }
-  return s->GetCount();
+  return s->GetCount(InTrack);
 }
 
 /*****************************************************************************!
@@ -118,7 +118,7 @@ StringCountList::Exists
  *****************************************************************************/
 void
 StringCountList::IncreaseStringCount
-(QString InString, int InLineNummber)
+(QString InString, int InLineNummber, int InTrack)
 {
   StringCount*                          st;
 
@@ -126,5 +126,29 @@ StringCountList::IncreaseStringCount
   if ( NULL == st ) {
     return;
   }
-  st->IncreaseCount(InLineNummber);
+  st->IncreaseCount(InLineNummber, InTrack);
 }
+
+/*****************************************************************************!
+ * Function : GetLineIndexByLineNumber
+ *****************************************************************************/
+int
+StringCountList::GetLineIndexByLineNumber
+(int InLineNumber, int InTrack)
+{
+  StringCount*                          st;
+  int                                   i;
+  int                                   n;
+
+  n = strings.size();
+
+  for (i = 0; i < n; i++) {
+    st = strings[i];
+    if ( st->HasLineNumberReference(InLineNumber, InTrack) ) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+

@@ -1,11 +1,11 @@
 /*****************************************************************************
- * FILE NAME    : StringCountList.h
- * DATE         : June 06 2023
+ * FILE NAME    : LineDiffTable.h
+ * DATE         : June 07 2023
  * PROJECT      : 
- * COPYRIGHT    : Copyright (C) 2023 by Gregory R Saltis
+ * COPYRIGHT    : Copyright (C) 2023 by Vertiv Company
  *****************************************************************************/
-#ifndef _stringcountlist_h_
-#define _stringcountlist_h_
+#ifndef _linedifftable_h_
+
 
 /*****************************************************************************!
  * Global Headers
@@ -17,38 +17,33 @@
 /*****************************************************************************!
  * Local Headers
  *****************************************************************************/
-#include "StringCount.h"
 
 /*****************************************************************************!
  * Exported Macros
  *****************************************************************************/
+#define LINE_DIFF_TABLE_X               200
+#define LINE_DIFF_TABLE_Y               200
+#define LINE_DIFF_TABLE_WIDTH           200
+#define LINE_DIFF_TABLE_HEIGHT          200
 
 /*****************************************************************************!
- * Exported Class : StringCountList
+ * Exported Class : LineDiffTable
  *****************************************************************************/
-class StringCountList : QWidget
+class LineDiffTable : public QWidget
 {
   Q_OBJECT;
 
  //! Constructors
  public :
-  StringCountList               ();
+  LineDiffTable                 ();
 
  //! Destructor
  public :
-  ~StringCountList              ();
+  ~LineDiffTable                ();
 
  //! Public Methods
  public :
-  StringCount*                  FindString              (QString InString);
-  int                           FindStringCount         (QString InString, int InTrack);
-  void                          Append                  (StringCount* InStringCount);
-  StringCount*                  GetByIndex              (int InIndex);
-  int                           GetSize                 (void);
-  bool                          Exists                  (QString InString);
-  void                          IncreaseStringCount     (QString InString, int InLineNumber, int InTrack);
-  int                           GetLineIndexByLineNumber(int InLineNumber, int InTrack);
-  
+
  //! Public Data
  public :
 
@@ -60,11 +55,14 @@ class StringCountList : QWidget
 
  //! Private Methods
  private :
+  void                          initialize              ();
+  void                          CreateSubWindows        ();
+  void                          InitializeSubWindows    ();
+  void                          resizeEvent             (QResizeEvent* InEvent);
 
  //! Private Data
  private :
-  QList<StringCount*>         strings;
-  
+
  //! Public Slots
  public slots :
 
@@ -76,4 +74,6 @@ class StringCountList : QWidget
 
 };
 
-#endif /* _stringcountlist_h_*/
+#define _linedifftable_h_
+
+#endif /* _linedifftable_h_*/

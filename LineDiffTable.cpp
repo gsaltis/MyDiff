@@ -1,5 +1,5 @@
 /*****************************************************************************
- * FILE NAME    : SourceLineReference.cpp
+ * FILE NAME    : LineDiffTable.cpp
  * DATE         : June 07 2023
  * PROJECT      : 
  * COPYRIGHT    : Copyright (C) 2023 by Vertiv Company
@@ -15,99 +15,72 @@
 /*****************************************************************************!
  * Local Headers
  *****************************************************************************/
-#include "SourceLineReference.h"
+#include "LineDiffTable.h"
 
 /*****************************************************************************!
- * Function : SourceLineReference
+ * Function : LineDiffTable
  *****************************************************************************/
-SourceLineReference::SourceLineReference
+LineDiffTable::LineDiffTable
 () : QWidget()
 {
-  count = 0;
+  QPalette pal;
+  pal = palette();
+  pal.setBrush(QPalette::Window, QBrush(QColor(255, 255, 255)));
+  setPalette(pal);
+  setAutoFillBackground(true);
+  initialize();
 }
 
 /*****************************************************************************!
- * Function : ~SourceLineReference
+ * Function : ~LineDiffTable
  *****************************************************************************/
-SourceLineReference::~SourceLineReference
+LineDiffTable::~LineDiffTable
 ()
 {
 }
 
 /*****************************************************************************!
- * Function : GetCount
- *****************************************************************************/
-int
-SourceLineReference::GetCount
-()
-{
-  return count;
-}
-
-/*****************************************************************************!
- * Function : AddLineNumber
+ * Function : initialize
  *****************************************************************************/
 void
-SourceLineReference::AddLineNumber
-(int InLineNumber)
+LineDiffTable::initialize()
 {
-  lineNumbers << new SourceLineNumber(InLineNumber);
-  IncrementCount();
+  InitializeSubWindows();  
+  CreateSubWindows();
 }
 
 /*****************************************************************************!
- * Function : GetLineNumberCount
- *****************************************************************************/
-int
-SourceLineReference::GetLineNumberCount
-()
-{
-  return lineNumbers.size();
-}
-
-/*****************************************************************************!
- * Function : GetLineNumberByIndex
- *****************************************************************************/
-SourceLineNumber*
-SourceLineReference::GetLineNumberByIndex
-(int InIndex)
-{
-  if ( InIndex < 0 || InIndex >= lineNumbers.size() ) {
-    return 0;
-  }
-  return lineNumbers[InIndex];
-}
-
-
-/*****************************************************************************!
- * Function : IncrementCount
+ * Function : CreateSubWindows
  *****************************************************************************/
 void
-SourceLineReference::IncrementCount
-()
+LineDiffTable::CreateSubWindows()
 {
-  count++;
+  
 }
 
 /*****************************************************************************!
- * Function : HasLineNumberReference
+ * Function : InitializeSubWindows
  *****************************************************************************/
-bool
-SourceLineReference::HasLineNumberReference
-(int InLineNumber)
+void
+LineDiffTable::InitializeSubWindows()
 {
-  SourceLineNumber*                     lineN;
-  int                                   i;
-  int                                   n;
-
-  n = lineNumbers.size();
-
-  for (i = 0; i < n; i++) {
-    lineN = lineNumbers[i];
-    if ( lineN->GetLineNumber() == InLineNumber ) {
-      return true;
-    }
-  }
-  return false;
+  
 }
 
+/*****************************************************************************!
+ * Function : resizeEvent
+ *****************************************************************************/
+void
+LineDiffTable::resizeEvent
+(QResizeEvent* InEvent)
+{
+  QSize                                 size;  
+  int                                   width;
+  int                                   height;
+
+  size = InEvent->size();
+  width = size.width();
+  height = size.height();
+  (void)height;
+  (void)width;
+}

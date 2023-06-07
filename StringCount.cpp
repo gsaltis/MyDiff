@@ -23,9 +23,10 @@
 StringCount::StringCount
 (QString InString, int InLineNumber) : QWidget()
 {
-  fileRef1 = new SourceLineReference();
-  fileRef2 = new SourceLineReference();
-  fileRef1->AddLineNumber(InLineNumber);
+  TrackCount = 2;
+  fileRef[0] = new SourceLineReference();
+  fileRef[1] = new SourceLineReference();
+  fileRef[0]->AddLineNumber(InLineNumber);
   string = InString;
 }
 
@@ -51,9 +52,12 @@ StringCount::~StringCount
  *****************************************************************************/
 void
 StringCount::IncreaseCount
-(int InLineNumber)
+(int InLineNumber, int InTrack)
 {
-  fileRef1->AddLineNumber(InLineNumber);
+  if ( InTrack >= TrackCount ) {
+    return;
+  }
+  fileRef[InTrack]->AddLineNumber(InLineNumber);
 }
 
 /*****************************************************************************!
@@ -71,9 +75,12 @@ StringCount::GetString
  *****************************************************************************/
 int
 StringCount::GetCount
-()
+(int InTrack)
 {
-  return fileRef1->GetCount();
+  if ( InTrack >= TrackCount ) {
+    return 0;
+  }
+  return fileRef[InTrack]->GetCount();
 }
 
 /*****************************************************************************!
@@ -81,9 +88,12 @@ StringCount::GetCount
  *****************************************************************************/
 int
 StringCount::GetLineNumberCount
-()
+(int InTrack)
 {
-  return fileRef1->GetLineNumberCount();
+  if ( InTrack >= TrackCount ) {
+    return 0;
+  }
+  return fileRef[InTrack]->GetLineNumberCount();
 }
 
 /*****************************************************************************!
@@ -91,13 +101,29 @@ StringCount::GetLineNumberCount
  *****************************************************************************/
 int
 StringCount::GetLineNumber
-(int InIndex)
+(int InIndex, int InTrack)
 {
   SourceLineNumber*                     lineNumber;
 
-  lineNumber = fileRef1->GetLineNumberByIndex(InIndex);
+  if ( InTrack >= TrackCount ) {
+    return 0;
+  }
+  lineNumber = fileRef[InTrack]->GetLineNumberByIndex(InIndex);
   if ( NULL == lineNumber ) {
     return 0;
   }
   return lineNumber->GetLineNumber();
+}
+
+/*****************************************************************************!
+ * Function : HasLineNumberReference
+ *****************************************************************************/
+bool
+StringCount::HasLineNumberReference
+(int InLineNumber, int InTrack)
+{
+  if ( InTrack >= TrackCount ) {
+    return 0;
+  }
+  return fileRef[InTrack]->HasLineNumberReference(InLineNumber);
 }

@@ -45,6 +45,7 @@ class SourceLineReference : public QWidget
   int                           GetLineNumberCount      ();
   SourceLineNumber*             GetLineNumberByIndex    (int InIndex);
   void                          IncrementCount          ();
+  bool                          HasLineNumberReference  (int InLineNumber);
   
  //! Public Data
  public :

@@ -42,11 +42,12 @@ class StringCount : public QWidget
 
  //! Public Methods
  public :
-  void                          IncreaseCount           (int InLineNumber);
+  void                          IncreaseCount           (int InLineNumber, int InTrack);
   QString                       GetString               ();
-  int                           GetCount                ();
-  int                           GetLineNumber           (int InIndex);
-  int                           GetLineNumberCount      ();
+  int                           GetCount                (int InTrack);
+  int                           GetLineNumber           (int InIndex, int InTrack);
+  int                           GetLineNumberCount      (int InTrack);
+  bool                          HasLineNumberReference  (int InLineNumber, int InTrack);
   
  //! Public Data
  public :
@@ -63,9 +64,9 @@ class StringCount : public QWidget
  //! Private Data
  private :
   QString                               string;
-  SourceLineReference*                  fileRef1;
-  SourceLineReference*                  fileRef2;
-
+  SourceLineReference*                  fileRef[2];
+  int                                   TrackCount;
+  
  //! Public Slots
  public slots :
 

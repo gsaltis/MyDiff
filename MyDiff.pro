@@ -30,6 +30,7 @@ QT                              += core gui widgets
 DEFINES                         += \
 
 SOURCES                         += \
+				   LineDiffTable.cpp                            \
 				   MainDisplayWindow.cpp                        \
 				   MainWindow.cpp                               \
 				   SourceLineNumber.cpp                         \
@@ -41,6 +42,7 @@ SOURCES                         += \
 				   trace.cpp                                    \
 
 HEADERS                         += \
+				   LineDiffTable.h                              \
 				   MainDisplayWindow.h                          \
 				   MainWindow.h                                 \
 				   SourceLineNumber.h                           \

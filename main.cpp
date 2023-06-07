@@ -46,7 +46,7 @@ CompareFiles
 
 bool
 ReadFile
-(QString InFileName, QStringList& InFileLines);
+(QString InFileName, QStringList& InFileLines, int InTrack);
 
 QString
 ProcessFileBuffer
@@ -54,12 +54,16 @@ ProcessFileBuffer
 
 void
 ProcessFileLines
-(QStringList InLineList);
+(QStringList InLineList, int InTrack);
 
 QString
 ProcessFileLine
 (QString InLine);
-  
+
+void
+DisplayFileLines
+(bool InDisplayLineNumbers);
+
 /*****************************************************************************!
  * Local Data
  *****************************************************************************/
@@ -76,10 +80,10 @@ QStringList
 mainFileLines2;
 
 StringCountList*
-mainStringsCount1;
+mainStringsCount;
 
-StringCountList*
-mainStringsCount2;
+bool
+mainDisplayLineNumbers = true;
 
 /*****************************************************************************!
  * Function : main
@@ -113,14 +117,13 @@ main
   mainFileName1 = commandLineParser.value(fileName1Option);
   mainFileName2 = commandLineParser.value(fileName2Option);
 
-  mainStringsCount1 = new StringCountList();
-  mainStringsCount2 = new StringCountList();
+  mainStringsCount = new StringCountList();
   
   VerifyCommandLine();
   if ( ! ReadFiles() ) {
     exit(EXIT_FAILURE);
   }
-  
+  DisplayFileLines(mainDisplayLineNumbers);
   w = new MainWindow(NULL);
   w->resize(MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT);
   w->move(MAIN_WINDOW_X, MAIN_WINDOW_Y);
@@ -167,18 +170,17 @@ bool
 ReadFiles
 ()
 {
-  if ( ! ReadFile(mainFileName1, mainFileLines1) ) {
+  if ( ! ReadFile(mainFileName1, mainFileLines1, 0) ) {
     fprintf(stderr, "Could not read %s\n", mainFileName1.toStdString().c_str());
     return false;
   }
 
-#if 0
-  if ( ! ReadFile(mainFileName2, mainFileLines2) ) {
+
+  if ( ! ReadFile(mainFileName2, mainFileLines2, 1) ) {
     fprintf(stderr, "Could not read %s\n", mainFileName2.toStdString().c_str());
     return false;
   }
-  TRACE_FUNCTION_INT(mainFileLines2.size());
-#endif
+
   return true;
 }
 
@@ -187,7 +189,7 @@ ReadFiles
  *****************************************************************************/
 bool
 ReadFile
-(QString InFileName, QStringList& InFileList)
+(QString InFileName, QStringList& InFileList, int InTrack)
 {
   QString                               buffer;
   QString                               buffer2;
@@ -201,7 +203,7 @@ ReadFile
   buffer = QString(file.readAll());
   buffer2 = ProcessFileBuffer(buffer);
   InFileList = buffer2.split("\n", Qt::KeepEmptyParts);
-  ProcessFileLines(InFileList);
+  ProcessFileLines(InFileList, InTrack);
   fflush(stdout);
   
   file.close();
@@ -292,12 +294,8 @@ ProcessFileBuffer
  *****************************************************************************/
 void
 ProcessFileLines
-(QStringList InLines)
+(QStringList InLines, int InTrack)
 {
-  int                                   lineNumberCount;
-  int                                   k;
-  StringCount*                          line2;
-  int                                   m;
   QString                               line;
   QString                               line1;
   int                                   n;
@@ -309,24 +307,44 @@ ProcessFileLines
     line = InLines[i];
     line1 = ProcessFileLine(line);
     line1 = line1.trimmed();
-    if ( ! mainStringsCount1->Exists(line1) ) {
-      mainStringsCount1->Append(new StringCount(line1, i + 1));
+    if ( ! mainStringsCount->Exists(line1) ) {
+      mainStringsCount->Append(new StringCount(line1, i + 1));
     } else {
-      mainStringsCount1->IncreaseStringCount(line1, i + 1);
+      mainStringsCount->IncreaseStringCount(line1, i + 1, InTrack);
     }
   }
+}
 
-  m = mainStringsCount1->GetSize();
-  printf("%d\n", n);
+/*****************************************************************************!
+ * Function : DisplayFileLines
+ *****************************************************************************/
+void
+DisplayFileLines
+(bool InDisplayLineNumbers)
+{
+  int                                   p;
+  int                                   n;
+  int                                   k;
+  int                                   m;
+  StringCount*                          line2;
+  int                                   i;
+  
+  m = mainStringsCount->GetSize();
   printf("%d\n", m);
   for (i = 0; i < m; i++) {
-    line2 = mainStringsCount1->GetByIndex(i);
-    printf("%d\t%s\n", line2->GetCount(), line2->GetString().toStdString().c_str());
-    lineNumberCount = line2->GetLineNumberCount();
-    for ( k = 0 ; k < lineNumberCount ; k++ ) {
-      // printf("%d%s", line2->GetLineNumber(k), k + 1 < lineNumberCount ? "," : "");
+    line2 = mainStringsCount->GetByIndex(i);
+    printf("%d\t%d\t%s\n", line2->GetCount(0), line2->GetCount(1), line2->GetString().toStdString().c_str());
+    if ( !InDisplayLineNumbers ) {
+      continue;
     }
-    // printf("\n");
+    for ( p = 0 ; p < 2 ; p++ ) {
+      n = line2->GetLineNumberCount(p);
+      printf("\t\t");
+      for ( k = 0 ; k < n ; k++ ) {
+        printf("%d ", line2->GetLineNumber(k, p));
+      }
+      printf("\n");
+    }
   }
 }
 
