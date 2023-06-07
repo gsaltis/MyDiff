@@ -1,11 +1,11 @@
 /*****************************************************************************
- * FILE NAME    : SourceLineNumber.h
- * DATE         : June 06 2023
+ * FILE NAME    : SourceLineReference.h
+ * DATE         : June 07 2023
  * PROJECT      : 
- * COPYRIGHT    : Copyright (C) 2023 by Gregory R Saltis
+ * COPYRIGHT    : Copyright (C) 2023 by Vertiv Company
  *****************************************************************************/
-#ifndef _sourcelinenumber_h_
-#define _sourcelinenumber_h_
+#ifndef _sourcelinereference_h_
+#define _sourcelinereference_h_
 
 /*****************************************************************************!
  * Global Headers
@@ -17,33 +17,35 @@
 /*****************************************************************************!
  * Local Headers
  *****************************************************************************/
+#include "SourceLineNumber.h"
 
 /*****************************************************************************!
  * Exported Macros
  *****************************************************************************/
 
 /*****************************************************************************!
- * Exported Class : SourceLineNumber
+ * Exported Class : SourceLineReference
  *****************************************************************************/
-class SourceLineNumber : public QWidget
+class SourceLineReference : public QWidget
 {
   Q_OBJECT;
 
  //! Constructors
  public :
-  SourceLineNumber              (int InLineNumber);
+  SourceLineReference           ();
 
  //! Destructor
  public :
-  ~SourceLineNumber             ();
+  ~SourceLineReference          ();
 
  //! Public Methods
  public :
-  int                           GetLineNumber           (void);
-  void                          SetLineNumber           (int InLineNumber);
-  bool                          GetProcessed            (void);
-  void                          SetProcessed            (bool InProcessed);
-
+  int                           GetCount                ();
+  void                          AddLineNumber           (int InLineNumber);
+  int                           GetLineNumberCount      ();
+  SourceLineNumber*             GetLineNumberByIndex    (int InIndex);
+  void                          IncrementCount          ();
+  
  //! Public Data
  public :
 
@@ -58,8 +60,8 @@ class SourceLineNumber : public QWidget
 
  //! Private Data
  private :
-  int                           LineNumber;
-  bool                          Processed;
+  int                                   count;
+  SourceLineNumberList                  lineNumbers;
 
  //! Public Slots
  public slots :
@@ -72,10 +74,4 @@ class SourceLineNumber : public QWidget
 
 };
 
-/*****************************************************************************!
- * Exported Type : SourceLineNumberList
- *          Note : This is actually a list of pointers
- *****************************************************************************/
-typedef QList<SourceLineNumber*> SourceLineNumberList;
-
-#endif /* _sourcelinenumber_h_*/
+#endif /* _sourcelinereference_h_*/

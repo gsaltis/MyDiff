@@ -33,6 +33,7 @@ SOURCES                         += \
 				   MainDisplayWindow.cpp                        \
 				   MainWindow.cpp                               \
 				   SourceLineNumber.cpp                         \
+				   SourceLineReference.cpp                      \
 				   StringCount.cpp                              \
 				   StringCountList.cpp                          \
 				   SystemConfig.cpp                             \
@@ -43,6 +44,7 @@ HEADERS                         += \
 				   MainDisplayWindow.h                          \
 				   MainWindow.h                                 \
 				   SourceLineNumber.h                           \
+				   SourceLineReference.h                        \
 				   StringCount.h                                \
 				   StringCountList.h                            \
 				   SystemConfig.h                               \

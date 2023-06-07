@@ -18,6 +18,7 @@
  * Local Headers
  *****************************************************************************/
 #include "SourceLineNumber.h"
+#include "SourceLineReference.h"
 
 /*****************************************************************************!
  * Exported Macros
@@ -34,7 +35,6 @@ class StringCount : public QWidget
  public :
   StringCount                   ();
   StringCount                   (QString InString, int InLineNumber);
-  StringCount                   (StringCount& InStringCount);
 
  //! Destructor
  public :
@@ -63,8 +63,8 @@ class StringCount : public QWidget
  //! Private Data
  private :
   QString                               string;
-  int                                   count;
-  QList<SourceLineNumber*>              lineNumbers;
+  SourceLineReference*                  fileRef1;
+  SourceLineReference*                  fileRef2;
 
  //! Public Slots
  public slots :

@@ -1,8 +1,8 @@
 /*****************************************************************************
- * FILE NAME    : StringCount.cpp
- * DATE         : June 06 2023
+ * FILE NAME    : SourceLineReference.cpp
+ * DATE         : June 07 2023
  * PROJECT      : 
- * COPYRIGHT    : Copyright (C) 2023 by Gregory R Saltis
+ * COPYRIGHT    : Copyright (C) 2023 by Vertiv Company
  *****************************************************************************/
 
 /*****************************************************************************!
@@ -15,89 +15,79 @@
 /*****************************************************************************!
  * Local Headers
  *****************************************************************************/
-#include "StringCount.h"
+#include "SourceLineReference.h"
 
 /*****************************************************************************!
- * Function : StringCount
+ * Function : SourceLineReference
  *****************************************************************************/
-StringCount::StringCount
-(QString InString, int InLineNumber) : QWidget()
-{
-  fileRef1 = new SourceLineReference();
-  fileRef2 = new SourceLineReference();
-  fileRef1->AddLineNumber(InLineNumber);
-  string = InString;
-}
-
-/*****************************************************************************!
- * Function : StringCount
- *****************************************************************************/
-StringCount::StringCount
+SourceLineReference::SourceLineReference
 () : QWidget()
 {
-  string = "";
+  count = 0;
 }
 
 /*****************************************************************************!
- * Function : ~StringCount
+ * Function : ~SourceLineReference
  *****************************************************************************/
-StringCount::~StringCount
+SourceLineReference::~SourceLineReference
 ()
 {
-}
-
-/*****************************************************************************!
- * Function : IncreaseCount
- *****************************************************************************/
-void
-StringCount::IncreaseCount
-(int InLineNumber)
-{
-  fileRef1->AddLineNumber(InLineNumber);
-}
-
-/*****************************************************************************!
- * Function : GetString
- *****************************************************************************/
-QString
-StringCount::GetString
-()
-{
-  return string;
 }
 
 /*****************************************************************************!
  * Function : GetCount
  *****************************************************************************/
 int
-StringCount::GetCount
+SourceLineReference::GetCount
 ()
 {
-  return fileRef1->GetCount();
+  return count;
+}
+
+/*****************************************************************************!
+ * Function : AddLineNumber
+ *****************************************************************************/
+void
+SourceLineReference::AddLineNumber
+(int InLineNumber)
+{
+  lineNumbers << new SourceLineNumber(InLineNumber);
+  IncrementCount();
 }
 
 /*****************************************************************************!
  * Function : GetLineNumberCount
  *****************************************************************************/
 int
-StringCount::GetLineNumberCount
+SourceLineReference::GetLineNumberCount
 ()
 {
-  return fileRef1->GetLineNumberCount();
+  return lineNumbers.size();
 }
 
 /*****************************************************************************!
- * Function : GetLineNumber
+ * Function : GetLineNumberByIndex
  *****************************************************************************/
-int
-StringCount::GetLineNumber
+SourceLineNumber*
+SourceLineReference::GetLineNumberByIndex
 (int InIndex)
 {
-  SourceLineNumber*                     lineNumber;
-
-  lineNumber = fileRef1->GetLineNumberByIndex(InIndex);
-  if ( NULL == lineNumber ) {
+  if ( InIndex < 0 || InIndex >= lineNumbers.size() ) {
     return 0;
   }
-  return lineNumber->GetLineNumber();
+  return lineNumbers[InIndex];
 }
+
+
+/*****************************************************************************!
+ * Function : IncrementCount
+ *****************************************************************************/
+void
+SourceLineReference::IncrementCount
+()
+{
+  count++;
+}
+
+
+
